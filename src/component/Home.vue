@@ -6,18 +6,40 @@
 </template>
 
 <script>
+import { useFetch } from '../composables/fetch.js';
+import { ref, computed } from 'vue';
 
 export default {
-    data: () => ({
-        name: 'Asif',
+    setup() {
+        let fetch_method = ref('get')
+        let fetch_url = ref('http://localhost:8000/api/v1/posts');
 
-        posts: {}
+        let { posts, errors } = useFetch(fetch_method, fetch_url);
+
+        setTimeout(function() {
+            console.log('posts :>> ', posts);
+            console.log('errors :>> ', errors);
+        }, 2000);
+
+        return { posts, errors };
+    },
+    data: () => ({
+        // posts: {}
     }),
     created() {
-        this.init();
+        var _this = this;
+        setTimeout(function() {
+            console.log(_this.posts);
+        }, 2000);
     },
     mounted() {
-
+        var _this = this;
+        setTimeout(function() {
+            console.log(_this.posts);
+        }, 2000);
+    },
+    updated() {
+        // 
     },
     methods: {
         init: function(){
@@ -33,9 +55,8 @@ export default {
         }
     },
     computed: {
-
+        // 
     }
-
 }
 </script>
 
