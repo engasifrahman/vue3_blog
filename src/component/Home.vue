@@ -11,7 +11,7 @@
                 <p>{{ post.body }}</p>
 
                 <h5>Comments</h5>
-                <div class="ms-3"  v-for="(comment, index) of post.comments" :key="index">
+                <div class="ms-3"  v-for="(comment, idx) of post.comments" :key="idx" ref="comment">
                     <small class="text-muted">{{ comment.user.name }} <font-awesome-icon icon="fa-regular fa-clock" /> {{ comment.created_at }} </small>
                     <p>{{ comment.comment }}</p>
                 </div>
@@ -19,8 +19,8 @@
                     <small class="text-muted">Username</small>
 
                     <div class="mb-3">
-                        <label for="write_comment" class="form-label text-secondary">Write a new comment</label>
-                        <textarea class="form-control" id="write_comment" rows="3"></textarea>
+                        <label :for="`write_comment_${index}`" class="form-label text-secondary">Write a new comment</label>
+                        <textarea class="form-control" :id="`write_comment_${index}`" rows="2" ref="write_comment"></textarea>
                     </div>
                 </div>
             </div>
@@ -41,7 +41,12 @@ export default {
         // 
     },
     updated() {
-        // 
+        console.log('this.$refs :>> ', this.$refs);
+
+        if(this.$refs.write_comment){
+            console.log('this.$refs.write_comment :>> ', this.$refs.write_comment);
+            this.$refs.write_comment[0].value = 'Hey Asif';
+        }
     },
     methods: {
         init: function(){
