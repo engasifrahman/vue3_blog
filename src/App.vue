@@ -26,7 +26,16 @@ import { RouterLink, RouterView } from 'vue-router';
   </header>
 
   <div class="container">
-    <RouterView />
+    <Suspense>
+      <!-- main content -->
+      <RouterView />
+
+
+      <!-- loading state -->
+      <template #fallback>
+        Loading...
+      </template>
+    </Suspense>
   </div>
 </template>
 

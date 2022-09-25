@@ -3,7 +3,6 @@ import App from "./App.vue";
 import router from "./router";
 import { createApp } from "vue";
 import { createPinia } from "pinia";
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -13,12 +12,13 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { faClock } from '@fortawesome/free-regular-svg-icons';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import "./assets/main.css";
+
 /* add icons to the library */
 library.add(faClock, faTimes);
 
-import "./assets/main.css";
-
-
+axios.defaults.baseURL = 'http://localhost:8000/api/v1';
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 
 const app = createApp(App);

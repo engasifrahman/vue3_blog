@@ -29,8 +29,27 @@
 </template>
 
 <script>
+import { ref } from 'vue';
+import { useAxios } from '@/composables/axios.js';
 
 export default {
+    async setup(){
+        let req_url = ref('/posts');
+        let req_config = ref({
+            method: 'GET',
+            data: {}
+        });
+
+        const { excecuteAxios } = await useAxios();
+        
+        return { req_url, req_config, excecuteAxios };
+
+        // const { axios_result, axios_errors, is_axios_finished } = await useAxios(req_url, req_config);
+
+        // return { req_url, req_config, axios_result, axios_errors, is_axios_finished, excecuteAxios };
+
+
+    },
     data: () => ({
         posts: {}
     }),
@@ -41,23 +60,29 @@ export default {
         // 
     },
     updated() {
-        console.log('this.$refs :>> ', this.$refs);
+        // console.log('this.$refs :>> ', this.$refs);
 
         if(this.$refs.write_comment){
-            console.log('this.$refs.write_comment :>> ', this.$refs.write_comment);
+            // console.log('this.$refs.write_comment :>> ', this.$refs.write_comment);
             this.$refs.write_comment[0].value = 'Hey Asif';
         }
     },
+    watch:{
+        axios_result: {
+            handler(newValue, oldValue) {
+                this.posts = newValue?.data || {};
+            },
+            deep: true
+        }
+    },
     methods: {
-        init: function(){
-            var _this = this;
-            this.$axios.get('http://localhost:8000/api/v1/posts')
-            .then(function(res) {
-                console.log('res :>> ', res);
+        async init(){
+            const { result, errors, is_finished } = await this.excecuteAxios(this.req_url, this.req_config);
 
-                _this.posts = Object.assign({}, res.data.data);
-                console.log('_this.posts', _this.posts);
-            });
+            if(is_finished){
+                this.posts = result?.data || {};
+                console.log('result :>> ', result);
+            }
         }
     },
     computed: {
