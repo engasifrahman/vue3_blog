@@ -1,22 +1,103 @@
 <template>
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <form>
-                <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Email address</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-                </div>
-                <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1">
-                </div>
-                <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                    <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+    <div class="col-sm-8 offset-sm-2 login-form">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title text-center">LOGIN</h5>
+                <form>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Email</label>
+                        <input type="email" class="form-control" v-model="user.email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Password</label>
+                        <input type="password" class="form-control" v-model="user.password" required>
+                    </div>
+                    <!-- <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                    </div> -->
+                    <div class=" text-center">
+                        <button type="submit" class="btn btn-primary" @click.prevent="login">Login</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
+    
 </template>
+
+<script>
+    import { ref } from 'vue';
+    import { useAxios } from '@/composables/axios.js';
+
+    export default {
+        name: "Login",
+        async setup(){
+            let req_url = ref('/login');
+            let req_config = ref({
+                method: 'POST',
+                data: {}
+            });
+
+            const { excecuteAxios } = useAxios();
+            
+            return { req_url, req_config, excecuteAxios };
+
+            // const { axios_result, axios_errors, is_axios_finished } = await useAxios(req_url, req_config);
+
+            // return { req_url, req_config, axios_result, axios_errors, is_axios_finished, excecuteAxios };
+        },
+        data: () => ({
+            user: {
+                email: "eng.asifrahman@gmail.com",
+                password: "12345678",
+                device_name: "Default Device"
+            },
+        }),
+        created() {
+            if (this.authToken) {
+                this.$router.push({name: 'dashboard'});
+            } else{
+                // alert('Email: eng.asifrahman@gmail.com &  Password: 12345678')
+                this.$emitter.emit('loadingStatus', false);
+            }
+        },
+        methods: {
+            async login() {
+                // this.$emmiter.emit("loadingStatus", true);
+                this.req_config.data = this.user;
+
+                const { result, errors, is_finished } = await this.excecuteAxios(this.req_url, this.req_config);
+
+                if(is_finished){
+                    this.$emitter.emit('loadingStatus', false);
+
+                    if(errors){
+                        this.$router.push({name: 'blog'});
+                    } else{
+                        console.log('result :>> ', result);
+
+                        this.authUser = result?.data?.user || {};
+                        this.authToken = result?.data?.token || '';
+
+                        localStorage.setItem("auth_user", JSON.stringify(this.authUser));
+                        localStorage.setItem("auth_token", this.authToken);
+            
+                        this.$axios.defaults.headers.common['Authorization'] = `Bearer ${this.authToken}`;
+            
+                        this.$router.push({name: 'dashboard'});
+                    }
+                }
+            }
+        }
+    };
+</script>
+<style scoped>
+.login-form{
+    height: calc(100vh - 100px);
+    align-items: center;
+    justify-content: center;
+    /* margin: auto; */
+    display: flex;
+}
+</style>

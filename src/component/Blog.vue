@@ -15,8 +15,8 @@
                     <small class="text-muted">{{ comment.user.name }} <font-awesome-icon icon="fa-regular fa-clock" /> {{ comment.created_at }} </small>
                     <p>{{ comment.comment }}</p>
                 </div>
-                <div class="ms-3">
-                    <small class="text-muted">Username</small>
+                <div v-if="authToken && Object.keys(authUser).length" class="ms-3">
+                    <small class="text-muted">{{ authUser?.name }}</small>
 
                     <div class="mb-3">
                         <label :for="`write_comment_${index}`" class="form-label text-secondary">Write a new comment</label>
@@ -29,10 +29,11 @@
 </template>
 
 <script>
-import { ref } from 'vue';
-import { useAxios } from '@/composables/axios.js';
+    import { ref } from 'vue';
+    import { useAxios } from '@/composables/axios.js';
 
-export default {
+    export default {
+    name: "Blog",
     async setup(){
         let req_url = ref('/posts');
         let req_config = ref({
@@ -40,19 +41,21 @@ export default {
             data: {}
         });
 
-        const { excecuteAxios } = await useAxios();
+        const { excecuteAxios } = useAxios();
         
-        return { req_url, req_config, excecuteAxios };
+        // return { req_url, req_config, excecuteAxios };
 
-        // const { axios_result, axios_errors, is_axios_finished } = await useAxios(req_url, req_config);
+        const { axios_result, axios_errors, is_axios_finished } = await useAxios(req_url, req_config);
 
-        // return { req_url, req_config, axios_result, axios_errors, is_axios_finished, excecuteAxios };
+        return { req_url, req_config, axios_result, axios_errors, is_axios_finished, excecuteAxios };
     },
     data: () => ({
         posts: {}
     }),
     created() {
-        this.init();
+        this.$emitter.emit('loadingStatus', true);
+
+        // this.init();
     },
     mounted() {
         // 
@@ -69,6 +72,7 @@ export default {
         axios_result: {
             handler(newValue, oldValue) {
                 this.posts = newValue?.data || {};
+                this.$emitter.emit('loadingStatus', false);
             },
             deep: true
         }
@@ -78,6 +82,8 @@ export default {
             const { result, errors, is_finished } = await this.excecuteAxios(this.req_url, this.req_config);
 
             if(is_finished){
+                this.$emitter.emit('loadingStatus', false);
+
                 this.posts = result?.data || {};
                 console.log('result :>> ', result);
             }
