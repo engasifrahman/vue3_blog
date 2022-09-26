@@ -47,8 +47,6 @@ export default {
         // const { axios_result, axios_errors, is_axios_finished } = await useAxios(req_url, req_config);
 
         // return { req_url, req_config, axios_result, axios_errors, is_axios_finished, excecuteAxios };
-
-
     },
     data: () => ({
         posts: {}
@@ -62,10 +60,10 @@ export default {
     updated() {
         // console.log('this.$refs :>> ', this.$refs);
 
-        if(this.$refs.write_comment){
-            // console.log('this.$refs.write_comment :>> ', this.$refs.write_comment);
-            this.$refs.write_comment[0].value = 'Hey Asif';
-        }
+        // if(this.$refs.write_comment){
+        //     console.log('this.$refs.write_comment :>> ', this.$refs.write_comment);
+        //     this.$refs.write_comment[0].value = 'Hey Asif';
+        // }
     },
     watch:{
         axios_result: {
