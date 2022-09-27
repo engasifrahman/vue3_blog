@@ -27,7 +27,7 @@ const router = createRouter({
         {
           path: "users",
           name: "dashboard.users",
-          meta: { title: 'Users list' },
+          meta: { title: 'Users' },
           component: () => import('@/component/Dashboard.vue'),
         },
 

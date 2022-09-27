@@ -22,7 +22,18 @@
             </ul>
           </div>
           <div v-if="authToken" class="d-flex me-3">
-            <a class="dropdown-item" href="#" @click.prevent="logout">Logout</a>
+            <ul class="navbar-nav">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  {{ authUser?.name }}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li>
+                    <a class="dropdown-item" href="#" @click="logout">Logout</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
           </div>
         </div>
       </nav>
@@ -35,7 +46,7 @@
 
         <!-- loading state -->
         <template #fallback>
-          Suspense Loading...
+          Suspense Loader...
         </template>
       </Suspense>
     </div>
@@ -68,7 +79,7 @@
       $route: {
         immediate: true,
         handler(to, from) {
-          document.title = to.meta.title || 'Blog page';
+          document.title = to.meta.title || 'Blog';
         }
       },
     },

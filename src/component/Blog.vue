@@ -19,7 +19,7 @@
                     <small class="text-muted">{{ authUser?.name }}</small>
 
                     <div class="mb-3">
-                        <label :for="`write_comment_${index}`" class="form-label text-secondary">Write a new comment</label>
+                        <label :for="`write_comment_${index}`" class="form-label text-secondary"><small>Write a new comment</small></label>
                         <textarea class="form-control" :id="`write_comment_${index}`" rows="2" ref="write_comment"></textarea>
                     </div>
                 </div>
