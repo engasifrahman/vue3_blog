@@ -1,6 +1,6 @@
 <template>
     <ul class="list-group">
-        <li class="list-group-item">
+        <li v-if="isSuperAdmin" class="list-group-item">
             <RouterLink class="nav-link text-center" to="/dashboard/users">Users</RouterLink>
         </li>
         <li class="list-group-item">            
@@ -42,5 +42,22 @@
                 this.$router.push({name: 'login'});
             }
         },
+        computed: {
+            isSuperAdmin: function(){
+                let roles = this.authUser?.roles || [];
+                // console.log('roles :>> ', roles);
+
+                let superAdmin = false;
+                roles.forEach((item) => {
+                    // console.log(item);
+
+                    if(item?.name == 'Super Admin'){
+                        superAdmin = true;
+                    }
+                });
+
+                return superAdmin;
+            }
+        }
     }
 </script>
