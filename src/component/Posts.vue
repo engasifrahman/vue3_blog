@@ -1,23 +1,16 @@
 <template>
-    <div class="row mt-3">
-        <div class="col-sm-2">
-            <SideMenu />
-        </div>
-        <div class="col-sm-10">
-            <RouterView />
-        </div>
+    <div class="row">
+        Posts will come here
     </div>
 
 </template>
 
 <script>
     import { ref } from 'vue';
-    import { RouterView } from 'vue-router';
-    import SideMenu from '@/component/SideMenu.vue';
     import { useAxios } from '@/composables/axios.js';
 
     export default {
-        name: "Dashboard",
+        name: "Posts",
         async setup(){
             let req_url = ref('/login');
             let req_config = ref({
@@ -33,18 +26,11 @@
 
             // return { req_url, req_config, axios_result, axios_errors, is_axios_finished, excecuteAxios };
         },
-        components: {
-            SideMenu
-        },
         data: () => ({
-            user: {
-                email: "eng.asifrahman@gmail.com",
-                password: "12345678",
-                device_name: "Default Device"
-            },
+            // 
         }),
         created() {
-            console.log('Dashboard Created');
+            console.log('Posts Created');
         }
     }
 </script>

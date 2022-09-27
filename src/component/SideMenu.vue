@@ -18,7 +18,7 @@
     import { useAxios } from '@/composables/axios.js';
 
     export default {
-        name: "Login",
+        name: "SideMenu",
         async setup(){
             let req_url = ref('/login');
             let req_config = ref({
@@ -38,9 +38,7 @@
             // 
         }),
         created() {
-            if (!this.authToken) {
-                this.$router.push({name: 'login'});
-            }
+            console.log('Side Menu Created');
         },
         computed: {
             isSuperAdmin: function(){

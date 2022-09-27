@@ -17,7 +17,7 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <RouterLink class="nav-link" :to="authToken ? '/dashboard' : '/login'">{{ authToken ? 'Dashboard' : 'Login' }}</RouterLink>
+                <RouterLink class="nav-link" :to="authToken ? '/dashboard/posts' : '/login'">{{ authToken ? 'Dashboard' : 'Login' }}</RouterLink>
               </li>
             </ul>
           </div>
@@ -63,7 +63,7 @@
       loadingStatus: false,
     }),
     created() {
-      this.reloadAuthData();
+      console.log('App Created');
 
       this.$emitter.on("loadingStatus", payload => { 
         this.loadingStatus = payload;
@@ -90,7 +90,9 @@
 
         this.reloadAuthData();
 
-        this.$router.push({name: 'blog'});
+        if (this.$route.name !== 'blog'){
+          this.$router.push({name: 'login'});
+        }
       }
     }
   };

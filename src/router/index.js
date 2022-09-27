@@ -1,3 +1,4 @@
+import Blog from '@/component/Blog.vue';
 import Login from '@/component/Login.vue';
 
 import { createRouter, createWebHistory } from 'vue-router';
@@ -9,7 +10,7 @@ const router = createRouter({
       path: '/',
       name: 'blog',
       meta: { title: 'Blog page' },
-      component: () => import('@/component/Blog.vue'),
+      component: Blog,
     },
     {
       path: "/login",
@@ -22,7 +23,7 @@ const router = createRouter({
       name: "dashboard",
       meta: { title: 'Dashboard' },
       component: () => import('@/component/Dashboard.vue'),
-      // redirect: {path: "dashboard/users"},
+      redirect: {path: "dashboard/posts"},
       children: [
         {
           path: "users",
@@ -35,7 +36,7 @@ const router = createRouter({
           path: "posts",
           name: "dashboard.posts",
           meta: { title: 'Posts' },
-          component: () => import('@/component/Dashboard.vue'),
+          component: () => import('@/component/Posts.vue'),
         },
 
         {

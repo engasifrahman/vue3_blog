@@ -53,6 +53,8 @@
         posts: {}
     }),
     created() {
+        console.log('Blog Created');
+
         this.$emitter.emit('loadingStatus', true);
 
         // this.init();

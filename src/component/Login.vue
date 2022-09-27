@@ -55,6 +55,8 @@
             },
         }),
         created() {
+            console.log('Login Created');
+            
             if (this.authToken) {
                 this.$router.push({name: 'dashboard'});
             }
@@ -75,6 +77,9 @@
                     } else{
                         console.log('result :>> ', result);
 
+                        this.user.email = '';
+                        this.user.password = '';
+
                         let authUser = result?.data?.user || {};
                         let authToken = result?.data?.token || '';
 
@@ -92,12 +97,13 @@
         }
     };
 </script>
+
 <style scoped>
-.login-form{
-    height: calc(100vh - 100px);
-    align-items: center;
-    justify-content: center;
-    /* margin: auto; */
-    display: flex;
-}
+    .login-form{
+        height: calc(100vh - 100px);
+        align-items: center;
+        justify-content: center;
+        /* margin: auto; */
+        display: flex;
+    }
 </style>
