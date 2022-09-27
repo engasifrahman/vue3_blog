@@ -57,9 +57,6 @@
         created() {
             if (this.authToken) {
                 this.$router.push({name: 'dashboard'});
-            } else{
-                // alert('Email: eng.asifrahman@gmail.com &  Password: 12345678')
-                this.$emitter.emit('loadingStatus', false);
             }
         },
         methods: {

@@ -40,8 +40,6 @@
         created() {
             if (!this.authToken) {
                 this.$router.push({name: 'login'});
-            } else{
-                this.$emitter.emit('loadingStatus', false);
             }
         },
     }

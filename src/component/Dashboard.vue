@@ -16,8 +16,6 @@
     import SideMenu from '@/component/SideMenu.vue';
     import { useAxios } from '@/composables/axios.js';
 
-
-
     export default {
         name: "Login",
         async setup(){
