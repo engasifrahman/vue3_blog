@@ -1,22 +1,21 @@
 <template>
-    <div class="row mt-3">
-        <div class="col-sm-2">
-            <SideMenu />
-        </div>
-        <div class="col-sm-10">
-            <RouterView />
-        </div>
-    </div>
-
+    <ul class="list-group">
+        <li class="list-group-item">
+            <RouterLink class="nav-link text-center" to="/dashboard/users">Users</RouterLink>
+        </li>
+        <li class="list-group-item">            
+            <RouterLink class="nav-link text-center" to="/dashboard/posts">Posts</RouterLink>
+        </li>
+        <li class="list-group-item">
+            <RouterLink class="nav-link text-center" to="/dashboard/comments">Comments</RouterLink>
+        </li>
+    </ul>
 </template>
 
 <script>
     import { ref } from 'vue';
-    import { RouterView } from 'vue-router';
-    import SideMenu from '@/component/SideMenu.vue';
+    import { RouterLink } from 'vue-router';
     import { useAxios } from '@/composables/axios.js';
-
-
 
     export default {
         name: "Login",
@@ -35,15 +34,8 @@
 
             // return { req_url, req_config, axios_result, axios_errors, is_axios_finished, excecuteAxios };
         },
-        components: {
-            SideMenu
-        },
         data: () => ({
-            user: {
-                email: "eng.asifrahman@gmail.com",
-                password: "12345678",
-                device_name: "Default Device"
-            },
+            // 
         }),
         created() {
             if (!this.authToken) {

@@ -1,5 +1,4 @@
 import Login from '@/component/Login.vue';
-import Logout from '@/component/Logout.vue';
 
 import { createRouter, createWebHistory } from 'vue-router';
 
@@ -17,12 +16,6 @@ const router = createRouter({
       name: "login",
       meta: { title: 'Login form' },
       component: Login,
-    },
-    {
-      path: "/logout",
-      name: "logout",
-      meta: { title: 'logout' },
-      component: Logout
     },
     {
       path: "/dashboard",

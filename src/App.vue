@@ -1,7 +1,3 @@
-<script setup>
-  import { RouterLink, RouterView } from 'vue-router';
-</script>
-
 <template>
   <div v-if="loadingStatus" class="center-spinner">
     <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
@@ -26,7 +22,7 @@
             </ul>
           </div>
           <div v-if="authToken" class="d-flex me-3">
-            <RouterLink class="nav-link" to="/logout">Logout</RouterLink>
+            <a class="dropdown-item" href="#" @click.prevent="logout">Logout</a>
           </div>
         </div>
       </nav>
@@ -48,13 +44,25 @@
 </template>
 
 <script>
+  import { RouterLink, RouterView } from 'vue-router';
+
   export default {
     name: 'App',
     data: () => ({
       loadingStatus: false,
     }),
     created() {
-      this.$emitter.on("loadingStatus", payload => this.loadingStatus = payload);
+      this.reloadAuthData();
+
+      this.$emitter.on("loadingStatus", payload => { 
+        this.loadingStatus = payload;
+      });
+
+      this.$emitter.on("reloadAuthData", payload => { 
+        if(payload){
+          this.reloadAuthData();
+        }
+      });
     },
     watch: {
       $route: {
@@ -63,6 +71,16 @@
           document.title = to.meta.title || 'Blog page';
         }
       },
+    },
+    methods: {
+      logout: function(){
+        localStorage.removeItem("auth_user");
+        localStorage.removeItem("auth_token");
+
+        this.reloadAuthData();
+
+        this.$router.push({name: 'blog'});
+      }
     }
   };
 </script>

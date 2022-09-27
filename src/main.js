@@ -31,7 +31,7 @@ const app = createApp(App);
 app.use(createPinia());
 app.use(router);
 app.component('font-awesome-icon', FontAwesomeIcon)
-app.mixin(authMixins)
+app.mixin(authMixins);
 
 app.config.globalProperties.$axios = axios;
 app.config.globalProperties.$emitter = emitter;

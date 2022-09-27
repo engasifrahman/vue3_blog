@@ -64,7 +64,7 @@
         },
         methods: {
             async login() {
-                // this.$emmiter.emit("loadingStatus", true);
+                this.$emitter.emit("loadingStatus", true);
                 this.req_config.data = this.user;
 
                 const { result, errors, is_finished } = await this.excecuteAxios(this.req_url, this.req_config);
@@ -73,17 +73,20 @@
                     this.$emitter.emit('loadingStatus', false);
 
                     if(errors){
-                        this.$router.push({name: 'blog'});
+                        // this.$router.push({name: 'login'});
+                        alert('Something went wrong!');
                     } else{
                         console.log('result :>> ', result);
 
-                        this.authUser = result?.data?.user || {};
-                        this.authToken = result?.data?.token || '';
+                        let authUser = result?.data?.user || {};
+                        let authToken = result?.data?.token || '';
 
-                        localStorage.setItem("auth_user", JSON.stringify(this.authUser));
-                        localStorage.setItem("auth_token", this.authToken);
+                        localStorage.setItem("auth_user", JSON.stringify(authUser));
+                        localStorage.setItem("auth_token", authToken);
             
                         this.$axios.defaults.headers.common['Authorization'] = `Bearer ${this.authToken}`;
+
+                        this.$emitter.emit('reloadAuthData', true);
             
                         this.$router.push({name: 'dashboard'});
                     }
