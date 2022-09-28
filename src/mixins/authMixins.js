@@ -1,4 +1,18 @@
+import { ref } from 'vue';
+import { useAxios } from '@/composables/axios.js';
+
 export default {
+    setup(){
+        let req_url = ref('/login');
+        let req_config = ref({
+            method: 'POST',
+            data: {}
+        });
+
+        const { excecuteAxios } = useAxios();
+        
+        return { req_url, req_config, excecuteAxios };
+    },
     data: () => ({
         authUser: {},
         authToken: '',
@@ -12,15 +26,24 @@ export default {
             this.authToken = localStorage.getItem("auth_token");
         }
     },
-    watch: {
-        authToken: function(val, oldVal){
-            if(val !== oldVal){
-                console.log(`authToken watch from ${this.$route.name} route :>> `, val);
+    computed: {
+        isSuperAdmin: function(){
+            let roles = this.authUser?.roles || [];
+            // console.log('roles :>> ', roles);
 
-                if (!val && this.$route.name !== 'blog'){
-                    this.$router.push({name: 'login'});
+            let superAdmin = false;
+            roles.forEach((item) => {
+                // console.log(item);
+
+                if(item?.name == 'Super Admin'){
+                    superAdmin = true;
                 }
-            }
-        }    
+            });
+
+            return superAdmin;
+        },
+        activeRoute: function () {
+            return this.$route.name;
+        }
     }
 }

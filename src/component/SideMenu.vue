@@ -39,23 +39,12 @@
         }),
         created() {
             console.log('Side Menu Created');
-        },
-        computed: {
-            isSuperAdmin: function(){
-                let roles = this.authUser?.roles || [];
-                // console.log('roles :>> ', roles);
-
-                let superAdmin = false;
-                roles.forEach((item) => {
-                    // console.log(item);
-
-                    if(item?.name == 'Super Admin'){
-                        superAdmin = true;
-                    }
-                });
-
-                return superAdmin;
-            }
         }
     }
 </script>
+
+<style scoped>
+.router-link-exact-active{
+    color: blue;
+}
+</style>

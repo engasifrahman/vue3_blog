@@ -23,13 +23,13 @@ const router = createRouter({
       name: "dashboard",
       meta: { title: 'Dashboard' },
       component: () => import('@/component/Dashboard.vue'),
-      redirect: {path: "dashboard/posts"},
+      // redirect: {path: "dashboard/users"},
       children: [
         {
           path: "users",
           name: "dashboard.users",
           meta: { title: 'Users' },
-          component: () => import('@/component/Dashboard.vue'),
+          component: () => import('@/component/Users.vue'),
         },
 
         {
@@ -43,7 +43,7 @@ const router = createRouter({
           path: "comments",
           name: "dashboard.comments",
           meta: { title: 'Comments' },
-          component: () => import('@/component/Dashboard.vue'),
+          component: () => import('@/component/Comments.vue'),
         }
       ]
     }

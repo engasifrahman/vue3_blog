@@ -1,13 +1,13 @@
 <template>
     <div class="row">
-        Posts will come here
+        Comments will come here
     </div>
 
 </template>
 
 <script>
     export default {
-        name: "Posts",
+        name: "Comments",
         async setup(){
             // 
         },
@@ -15,7 +15,7 @@
             // 
         }),
         created() {
-            console.log('Posts Created');
+            console.log('Comments Created');
 
             if(!this.authToken){
                 this.$router.push({name: 'login'});

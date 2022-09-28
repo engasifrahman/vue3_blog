@@ -17,7 +17,7 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <RouterLink class="nav-link" :to="authToken ? '/dashboard/posts' : '/login'">{{ authToken ? 'Dashboard' : 'Login' }}</RouterLink>
+                <RouterLink class="nav-link" :to="authToken ? '/dashboard' : '/login'">{{ authToken ? 'Dashboard' : 'Login' }}</RouterLink>
               </li>
             </ul>
           </div>
@@ -58,7 +58,7 @@
   import { RouterLink, RouterView } from 'vue-router';
 
   export default {
-    name: 'App',
+    name: "App",
     data: () => ({
       loadingStatus: false,
     }),
@@ -79,7 +79,16 @@
       $route: {
         immediate: true,
         handler(to, from) {
+          console.log('to', to)
           document.title = to.meta.title || 'Blog';
+
+          if (to?.name === 'dashboard') {
+              if (this.isSuperAdmin) {
+                this.$router.push({name: 'dashboard.users'});
+              } else {
+                this.$router.push({name: 'dashboard.posts'});
+              }
+          }
         }
       },
     },
@@ -91,7 +100,7 @@
         this.reloadAuthData();
 
         if (this.$route.name !== 'blog'){
-          this.$router.push({name: 'login'});
+          this.$router.push({name: 'blog'});
         }
       }
     }

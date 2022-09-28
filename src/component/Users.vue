@@ -1,13 +1,13 @@
 <template>
     <div class="row">
-        Posts will come here
+        Users will come here
     </div>
 
 </template>
 
 <script>
     export default {
-        name: "Posts",
+        name: "Users",
         async setup(){
             // 
         },
@@ -15,7 +15,7 @@
             // 
         }),
         created() {
-            console.log('Posts Created');
+            console.log('Users Created');
 
             if(!this.authToken){
                 this.$router.push({name: 'login'});
