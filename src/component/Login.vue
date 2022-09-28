@@ -75,7 +75,7 @@
                         // this.$router.push({name: 'login'});
                         alert('Something went wrong!');
                     } else{
-                        console.log('result :>> ', result);
+                        console.log('login response :>> ', result);
 
                         this.user.email = '';
                         this.user.password = '';
@@ -86,8 +86,6 @@
                         localStorage.setItem("auth_user", JSON.stringify(authUser));
                         localStorage.setItem("auth_token", authToken);
             
-                        this.$axios.defaults.headers.common['Authorization'] = `Bearer ${this.authToken}`;
-
                         this.$emitter.emit('reloadAuthData', true);
             
                         this.$router.push({name: 'dashboard'});

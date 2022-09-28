@@ -1,18 +1,6 @@
-import { ref } from 'vue';
-import { useAxios } from '@/composables/axios.js';
+import axios from "axios";
 
 export default {
-    setup(){
-        let req_url = ref('/login');
-        let req_config = ref({
-            method: 'POST',
-            data: {}
-        });
-
-        const { excecuteAxios } = useAxios();
-        
-        return { req_url, req_config, excecuteAxios };
-    },
     data: () => ({
         authUser: {},
         authToken: '',
@@ -24,6 +12,11 @@ export default {
         reloadAuthData: function(){
             this.authUser = JSON.parse(localStorage.getItem("auth_user"));
             this.authToken = localStorage.getItem("auth_token");
+
+            if (this.authToken) {
+                axios.defaults.headers.common['Authorization'] = `Bearer ${this.authToken}`;
+            }
+
         }
     },
     computed: {
