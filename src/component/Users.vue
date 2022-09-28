@@ -17,10 +17,6 @@
         created() {
             console.log('Users Created');
 
-            if(!this.authToken){
-                this.$router.push({name: 'login'});
-            }
-
             if (this.isSuperAdmin) {
                 this.$router.push({name: 'dashboard.users'});
             } else {

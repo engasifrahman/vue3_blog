@@ -16,10 +16,6 @@
         }),
         created() {
             console.log('Comments Created');
-
-            if(!this.authToken){
-                this.$router.push({name: 'login'});
-            }
         }
     }
 </script>
