@@ -96,14 +96,6 @@
         immediate: true,
         handler(to, from) {
           document.title = to.meta.title || 'Blog';
-
-          if (to?.name === 'dashboard') {
-              if (this.isSuperAdmin) {
-                this.$router.push({name: 'dashboard.users'});
-              } else {
-                this.$router.push({name: 'dashboard.posts'});
-              }
-          }
         }
       },
     },

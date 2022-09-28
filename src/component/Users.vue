@@ -20,6 +20,12 @@
             if(!this.authToken){
                 this.$router.push({name: 'login'});
             }
+
+            if (this.isSuperAdmin) {
+                this.$router.push({name: 'dashboard.users'});
+            } else {
+                this.$router.push({name: 'dashboard.posts'});
+            }
         }
     }
 </script>
