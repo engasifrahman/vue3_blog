@@ -59,7 +59,7 @@
 
 <script>
   import { ref } from 'vue';
-  import { useAxios } from '@/composables/axios.js';
+  import { useAxios } from '@/composables/useAxios.js';
   import { RouterLink, RouterView } from 'vue-router';
 
   export default {
@@ -92,12 +92,12 @@
       });
     },
     watch: {
-      $route: {
-        immediate: true,
-        handler(to, from) {
-          document.title = to.meta.title || 'Blog';
-        }
-      },
+      // $route: {
+      //   immediate: true,
+      //   handler(to, from) {
+      //     document.title = to.meta.title || 'Blog';
+      //   }
+      // },
     },
     methods: {
       async logout () {
@@ -111,24 +111,18 @@
         if(is_finished){
           this.loadingStatus = false;
 
-          if(errors){
-              alert('Something went wrong!');
-          } else {
-            console.log('logout response :>> ', result);
+          console.log('logout response :>> ', result);
 
-            if (result?.success) {
-              localStorage.removeItem("auth_user");
-              localStorage.removeItem("auth_token");
+          if(!errors){
+            localStorage.removeItem("auth_user");
+            localStorage.removeItem("auth_token");
 
-              this.$axios.defaults.headers.common['Authorization'] = ``;
+            this.reloadAuthData();
 
-              this.reloadAuthData();
-
-              if (this.$route.name !== 'blog'){
-                this.$router.push({name: 'blog'});
-              }
-            } else {
-              alert('Something went wrong!');
+            if (this.$route.name !== 'blog'){
+              this.$router.push({name: 'blog'});
+            } else{
+              this.$emitter.emit("reloadAuthDataOnBlog", true);
             }
           }
         }

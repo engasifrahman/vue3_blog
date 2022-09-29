@@ -1,4 +1,5 @@
 import axios from "axios";
+import { myToast } from '@/assets/myToast.js';
 import { ref, isRef, unref, watchEffect } from 'vue';
 
 export function useAxios(req_url = null, req_config = {}) {
@@ -26,10 +27,19 @@ export function useAxios(req_url = null, req_config = {}) {
         url: url,
         data: data
       }).then((res) => {
-        console.log('res :>> ', res);
+        // console.log('res :>> ', res);
+        if(res.data.success){
+          if(res.data?.message){
+            myToast('success', res.data.message);
+          }
 
-        axios_result.value = Object.assign({}, res.data);
-        is_axios_finished.value = true;
+          axios_result.value = Object.assign({}, res.data);
+        } else{
+          alert(res.data?.message || 'Something went wrong!');
+
+          axios_errors.value = Object.assign({}, res.data);
+        }
+        
       }).catch(($e) => {
         axios_errors.value = $e?.response?.data || $e;
         is_axios_finished.value = true;
@@ -53,12 +63,25 @@ export function useAxios(req_url = null, req_config = {}) {
         url: url,
         data: data
       }).then((res) => {
-        console.log('res :>> ', res);
+        // console.log('res :>> ', res);
+        if(res.data.success){
+          if(res.data?.message){
+            myToast('success', res.data.message);
+          }
 
-        result = Object.assign({}, res.data);
+          result= Object.assign({}, res.data);
+        } else{
+          alert(res.data?.message || 'Something went wrong!');
+
+          errors = Object.assign({}, res.data);
+        }
+
         is_finished = true;
       }).catch(($e) => {
+        alert('Something went wrong!');
+
         errors = $e?.response?.data || $e;
+
         is_finished = true;
       });
     }

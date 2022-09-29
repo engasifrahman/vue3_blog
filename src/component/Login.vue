@@ -28,7 +28,7 @@
 
 <script>
     import { ref } from 'vue';
-    import { useAxios } from '@/composables/axios.js';
+    import { useAxios } from '@/composables/useAxios.js';
 
     export default {
         name: "Login",
@@ -71,12 +71,9 @@
                 if(is_finished){
                     this.$emitter.emit('loadingStatus', false);
 
-                    if(errors){
-                        // this.$router.push({name: 'login'});
-                        alert('Something went wrong!');
-                    } else{
-                        console.log('login response :>> ', result);
+                    console.log('login response :>> ', result);
 
+                    if(!errors){
                         this.user.email = '';
                         this.user.password = '';
 

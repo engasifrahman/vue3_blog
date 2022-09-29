@@ -6,6 +6,8 @@ export default {
         authToken: '',
     }),
     created() {
+        // console.log(`Auth mixin initiated from - ${this.$route.name} - route`);
+
         this.reloadAuthData();
     },
     methods: {
@@ -13,10 +15,7 @@ export default {
             this.authUser = JSON.parse(localStorage.getItem("auth_user"));
             this.authToken = localStorage.getItem("auth_token");
 
-            if (this.authToken) {
-                axios.defaults.headers.common['Authorization'] = `Bearer ${this.authToken}`;
-            }
-
+            axios.defaults.headers.common['Authorization'] = `Bearer ${this.authToken || ''}`;
         }
     },
     computed: {

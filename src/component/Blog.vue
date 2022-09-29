@@ -30,7 +30,8 @@
 
 <script>
     import { ref } from 'vue';
-    import { useAxios } from '@/composables/axios.js';
+    import { useAxios } from '@/composables/useAxios.js';
+    import axios from "axios";
 
     export default {
     name: "Blog",
@@ -43,11 +44,11 @@
 
         const { excecuteAxios } = useAxios();
         
-        // return { req_url, req_config, excecuteAxios };
+        return { req_url, req_config, excecuteAxios };
 
-        const { axios_result, axios_errors, is_axios_finished } = await useAxios(req_url, req_config);
+        // const { axios_result, axios_errors, is_axios_finished } = await useAxios(req_url, req_config);
 
-        return { req_url, req_config, axios_result, axios_errors, is_axios_finished, excecuteAxios };
+        // return { req_url, req_config, axios_result, axios_errors, is_axios_finished, excecuteAxios };
     },
     data: () => ({
         posts: {}
@@ -55,9 +56,16 @@
     created() {
         console.log('Blog Created');
 
+        this.$emitter.on("reloadAuthDataOnBlog", payload => { 
+            if(payload){
+                console.log('reloadAuthDataOnBlog');
+                this.reloadAuthData();
+            }
+        });
+
         this.$emitter.emit('loadingStatus', true);
 
-        // this.init();
+        this.init();
     },
     mounted() {
         // 
@@ -86,8 +94,11 @@
             if(is_finished){
                 this.$emitter.emit('loadingStatus', false);
 
-                this.posts = result?.data || {};
-                console.log('result :>> ', result);
+                console.log('Blog response :>> ', result);
+
+                if(!errors){
+                    this.posts = result?.data || {};
+                }
             }
         }
     },
