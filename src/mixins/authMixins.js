@@ -19,6 +19,8 @@ export default {
 
                 this.reloadAuthData();
 
+                this.$emitter.emit('reloadAuthData', true);
+
                 this.$router.push({name: 'blog'});
             }
         }

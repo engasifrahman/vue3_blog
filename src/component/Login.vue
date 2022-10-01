@@ -42,10 +42,6 @@
             const { excecuteAxios } = useAxios();
             
             return { req_url, req_config, excecuteAxios };
-
-            // const { axios_result, axios_errors, is_axios_finished } = await useAxios(req_url, req_config);
-
-            // return { req_url, req_config, axios_result, axios_errors, is_axios_finished, excecuteAxios };
         },
         data: () => ({
             user: {
@@ -77,7 +73,7 @@
                         this.user.email = '';
                         this.user.password = '';
 
-                        let authUser = result?.data?.user || {};
+                        let authUser = Object.assign({}, result?.data?.user);
                         let authToken = result?.data?.token || '';
 
                         localStorage.setItem("auth_user", JSON.stringify(authUser));

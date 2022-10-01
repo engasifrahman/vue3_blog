@@ -50,17 +50,10 @@
         return { req_url, req_config, axios_result, axios_errors, is_axios_finished, excecuteAxios };
     },
     data: () => ({
-        posts: {}
+        posts: []
     }),
     created() {
         console.log('Blog Created');
-
-        this.$emitter.on("reloadAuthDataOnBlog", payload => { 
-            if(payload){
-                console.log('reloadAuthDataOnBlog');
-                this.reloadAuthData();
-            }
-        });
 
         this.$emitter.emit('loadingStatus', true);
 
@@ -82,7 +75,7 @@
             handler(newValue, oldValue) {
                 console.log('Blog response :>> ', newValue);
 
-                this.posts = newValue?.data || {};
+                this.posts = newValue?.data ? [...newValue.data] : [];
                 this.$emitter.emit('loadingStatus', false);
             },
             deep: true
@@ -92,6 +85,7 @@
                 console.log('Blog response error :>> ', newValue);
 
                 this.reqErrorMessage = newValue?.message;
+                this.$emitter.emit('loadingStatus', false);
             },
             deep: true
         }
