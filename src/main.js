@@ -11,7 +11,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 /* import specific icons */
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { faClock } from '@fortawesome/free-regular-svg-icons';
+import { faClock, faTrashCan, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 
 import authMixins from '@/mixins/authMixins.js';
 
@@ -20,7 +20,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '@/assets/main.css';
 
 /* add icons to the library */
-library.add(faClock, faTimes);
+library.add(faClock, faTimes, faTrashCan, faTrashAlt);
 
 router.beforeEach((to, from, next) => {
     // axios.defaults.headers.common['Authorization'] = 'Bearer ';

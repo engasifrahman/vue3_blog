@@ -35,12 +35,15 @@ export function useAxios(req_url = null, req_config = {}) {
 
           axios_result.value = Object.assign({}, res.data);
         } else{
-          alert(res.data?.message || 'Something went wrong!');
+          myToast('error', res.data?.message || 'Something went wrong!');
 
           axios_errors.value = Object.assign({}, res.data);
         }
         
       }).catch(($e) => {
+        console.log('$e :>> ', $e?.response?.data);
+        myToast('error', $e?.response?.data?.message || 'Something went wrong!');
+
         axios_errors.value = $e?.response?.data || $e;
         is_axios_finished.value = true;
       });
@@ -71,14 +74,15 @@ export function useAxios(req_url = null, req_config = {}) {
 
           result= Object.assign({}, res.data);
         } else{
-          alert(res.data?.message || 'Something went wrong!');
+          myToast('error', res.data?.message || 'Something went wrong!');
 
           errors = Object.assign({}, res.data);
         }
 
         is_finished = true;
       }).catch(($e) => {
-        alert('Something went wrong!');
+        console.log('$e :>> ', $e?.response?.data);
+        myToast('error', $e?.response?.data?.message || 'Something went wrong!');
 
         errors = $e?.response?.data || $e;
 

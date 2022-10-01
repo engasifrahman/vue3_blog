@@ -32,6 +32,6 @@
 
 <style scoped>
 .router-link-exact-active{
-    color: blue;
+    color: #0DCAF0;
 }
 </style>

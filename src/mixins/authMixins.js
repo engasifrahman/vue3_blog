@@ -4,11 +4,24 @@ export default {
     data: () => ({
         authUser: {},
         authToken: '',
+        reqErrorMessage: ''
     }),
     created() {
         // console.log(`Auth mixin initiated from - ${this.$route.name} - route`);
 
         this.reloadAuthData();
+    },
+    watch: {
+        reqErrorMessage: function(val, oldVal){
+            if(val === 'You are unauthenticated'){
+                localStorage.removeItem("auth_user");
+                localStorage.removeItem("auth_token");
+
+                this.reloadAuthData();
+
+                this.$router.push({name: 'blog'});
+            }
+        }
     },
     methods: {
         reloadAuthData: function(){

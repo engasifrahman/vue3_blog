@@ -31,7 +31,6 @@
 <script>
     import { ref } from 'vue';
     import { useAxios } from '@/composables/useAxios.js';
-    import axios from "axios";
 
     export default {
     name: "Blog",
@@ -44,11 +43,11 @@
 
         const { excecuteAxios } = useAxios();
         
-        return { req_url, req_config, excecuteAxios };
+        // return { req_url, req_config, excecuteAxios };
 
-        // const { axios_result, axios_errors, is_axios_finished } = await useAxios(req_url, req_config);
+        const { axios_result, axios_errors, is_axios_finished } = await useAxios(req_url, req_config);
 
-        // return { req_url, req_config, axios_result, axios_errors, is_axios_finished, excecuteAxios };
+        return { req_url, req_config, axios_result, axios_errors, is_axios_finished, excecuteAxios };
     },
     data: () => ({
         posts: {}
@@ -65,7 +64,7 @@
 
         this.$emitter.emit('loadingStatus', true);
 
-        this.init();
+        // this.init();
     },
     mounted() {
         // 
@@ -81,8 +80,18 @@
     watch:{
         axios_result: {
             handler(newValue, oldValue) {
+                console.log('Blog response :>> ', newValue);
+
                 this.posts = newValue?.data || {};
                 this.$emitter.emit('loadingStatus', false);
+            },
+            deep: true
+        },
+        axios_errors: {
+            handler(newValue, oldValue) {
+                console.log('Blog response error :>> ', newValue);
+
+                this.reqErrorMessage = newValue?.message;
             },
             deep: true
         }
