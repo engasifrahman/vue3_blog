@@ -6,7 +6,7 @@
                 <h5 v-if="actionType !== 'posts'" class="col-sm-6 ps-0 float-end text-end mb-0">
                     <span role="button" @click="closeForm"><font-awesome-icon icon="fa-regular fa-times-circle" /></span>
                 </h5>
-                <h5 v-else class="col-sm-6 ps-0 float-end text-end mb-0">
+                <h5 v-else-if="!userId" class="col-sm-6 ps-0 float-end text-end mb-0">
                     <span role="button" @click="addPost"><font-awesome-icon icon="fa-regular fa-square-plus" /></span>
                 </h5>
             </div>
@@ -16,6 +16,7 @@
                 <thead>
                     <tr>
                         <th scope="col">#</th>
+                        <th v-if="userId" scope="col">User</th>
                         <th scope="col">Slug</th>
                         <th scope="col">Title</th>
                         <th scope="col">Body</th>
@@ -26,14 +27,17 @@
                 <tbody>
                     <tr v-for="(post, index) in posts" :key="index">
                         <td>{{ index+1 }}</td>
+                        <td v-if="userId">{{ user.name }}</td>
                         <td>{{ post.slug }}</td>
                         <td>{{ post.title }}</td>
                         <td>{{ truncate(post.body, 30) }}</td>
                         <td>{{ post.created_at }}</td>
                         <td class="text-center">
                             <span role="button" class="text-info me-1" @click="showPost(post)"><font-awesome-icon icon="fa-regular fa-eye" /></span>
-                            <span role="button" class="text-warning me-1" @click="editPost(post)"><font-awesome-icon icon="fa-regular fa-pen-to-square" /></span>
-                            <span role="button" class="text-danger" @click="deleteConfirmation(index, post.slug)"><font-awesome-icon icon="fa-regular fa-trash-can" /></span>
+                            <span v-if="!userId">
+                                <span role="button" class="text-warning me-1" @click="editPost(post)"><font-awesome-icon icon="fa-regular fa-pen-to-square" /></span>
+                                <span role="button" class="text-danger" @click="deleteConfirmation(index, post.slug)"><font-awesome-icon icon="fa-regular fa-trash-can" /></span>
+                            </span>
                         </td>
                     </tr>
                 </tbody>
@@ -83,12 +87,18 @@
 
 <script>
     import { ref } from 'vue';
+    import { useRoute } from "vue-router";
     import { useAxios } from '@/composables/useAxios.js';
     
     export default {
         name: "Posts",
         async setup(){
-            let req_url = ref('/post');
+            const route = useRoute();
+            let userId = route.params.user_id;
+
+            console.log('userId :>> ', userId);
+
+            let req_url = ref(userId ? `/user/${userId}/posts` : '/post');
             let req_config = ref({
                 method: 'GET',
                 data: {}
@@ -97,12 +107,13 @@
             const { excecuteAxios } = useAxios();
             
             // return { req_url, req_config, excecuteAxios };
-
+            
             const { axios_result, axios_errors, is_axios_finished } = await useAxios(req_url, req_config);
 
-            return { req_url, req_config, axios_result, axios_errors, is_axios_finished, excecuteAxios };
-            },
+            return { userId, req_url, req_config, axios_result, axios_errors, is_axios_finished, excecuteAxios };
+        },
         data: () => ({
+            user: {},
             posts: [],
             post: {},
             cachedPost: {},
@@ -116,18 +127,17 @@
             this.$emitter.emit('loadingStatus', true);
 
             this.actionType = this.defaultType;
-
-            if (this.isSuperAdmin) {
-                this.$router.push({name: 'dashboard.posts'});
-            } else {
-                this.$router.push({name: 'dashboard.posts'});
-            }
         },
         watch: {
             axios_result: {
                 handler(newValue, oldValue) {
-                    console.log('Posts response :>> ', newValue);
-                    this.posts = newValue?.data ? [...newValue.data] : [];
+                    console.log('Posts response :>> ', newValue.data);
+                    if(this.userId){
+                        this.user = Object.assign({}, newValue?.data);
+                        this.posts = this.user?.posts ? [...this.user?.posts] : [];
+                    } else {
+                        this.posts = newValue?.data ? [...newValue.data] : [];
+                    }
                     this.$emitter.emit('loadingStatus', false);
                 },
                 deep: true
@@ -292,6 +302,8 @@
                     title = 'Add Post';
                 } else if(this.actionType === 'edit_post'){
                     title = 'Edit Post';
+                } else if(this.actionType === 'user_posts'){
+                    title = 'User Posts';
                 } else{
                     title = 'Posts';
                 }

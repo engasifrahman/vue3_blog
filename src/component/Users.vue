@@ -23,7 +23,7 @@
                 <tbody>
                     <tr v-for="(user, index) in users" :key="index">
                         <td>{{ index+1 }}</td>
-                        <td>{{ user.name }}</td>
+                        <td><a class="" href="#" @click="showUserPosts(user.id)">{{ user.name }}</a></td>
                         <td>{{ user.email }}</td>
                         <td>{{ user.phone }}</td>
                         <td>{{ user.created_at }}</td>
@@ -127,6 +127,9 @@
                 this.editedItemIndex = -1;
                 this.actionType = this.defaultType;
                 this.user = {};
+            },
+            showUserPosts(userId){
+                this.$router.push({name: 'dashboard.posts',  params: { user_id: userId } });
             },
             editUser(item) {
                 this.editedItemIndex =  this.users.indexOf(item);

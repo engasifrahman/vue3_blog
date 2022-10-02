@@ -4,7 +4,7 @@
             <RouterLink class="nav-link text-center" to="/dashboard/users">Users</RouterLink>
         </li>
         <li class="list-group-item">            
-            <RouterLink class="nav-link text-center" to="/dashboard/posts">Posts</RouterLink>
+            <RouterLink class="nav-link text-center" to="/dashboard/posts/">Posts</RouterLink>
         </li>
         <li class="list-group-item">
             <RouterLink class="nav-link text-center" to="/dashboard/comments">Comments</RouterLink>

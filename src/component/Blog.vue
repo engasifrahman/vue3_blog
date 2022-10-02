@@ -15,12 +15,17 @@
                     <small class="text-muted">{{ comment.user.name }} <font-awesome-icon icon="fa-regular fa-clock" /> {{ comment.created_at }} </small>
                     <p>{{ comment.comment }}</p>
                 </div>
-                <div v-if="authToken && Object.keys(authUser).length" class="ms-3">
+                <div v-if="authToken && Object.keys(authUser).length" class="row p-0 ms-1">
                     <small class="text-muted">{{ authUser?.name }}</small>
 
                     <div class="mb-3">
                         <label :for="`write_comment_${index}`" class="form-label text-secondary"><small>Write a new comment</small></label>
                         <textarea class="form-control" :id="`write_comment_${index}`" rows="2" ref="write_comment"></textarea>
+                    <div class="col-12 text-center">
+
+                        <button type="button" class="btn btn-primary float-end mt-2" @click="saveComment">Save</button>
+                        </div>
+
                     </div>
                 </div>
             </div>

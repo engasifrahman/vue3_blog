@@ -97,12 +97,6 @@
             this.$emitter.emit('loadingStatus', true);
 
             this.actionType = this.defaultType;
-
-            if (this.isSuperAdmin) {
-                this.$router.push({name: 'dashboard.comments'});
-            } else {
-                this.$router.push({name: 'dashboard.comments'});
-            }
         },
         watch: {
             axios_result: {

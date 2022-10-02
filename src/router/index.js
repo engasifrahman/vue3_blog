@@ -33,7 +33,8 @@ const router = createRouter({
         },
 
         {
-          path: "posts",
+          props: true,
+          path: "posts/:user_id?",
           name: "dashboard.posts",
           meta: { title: 'Posts' },
           component: () => import('@/component/Posts.vue'),
