@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <div class="rounded-top py-2 bg-info text-white">
+        <div class="col-12 rounded-top py-2 bg-info text-white">
             <div class="row">
                 <h5 class="col-sm-6 pe-0 mb-0">{{ actionTitle }}</h5>
                 <h5 v-if="actionType !== 'users'" class="col-sm-6 ps-0 float-end text-end mb-0">
@@ -8,49 +8,53 @@
                 </h5>
             </div>
         </div>
-        <table class="table table-bordered table-responsive" :class="{'d-none': actionType !== 'users'}">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Phone</th>
-                    <th scope="col">Created at</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(user, index) in users" :key="index">
-                    <td>{{ index+1 }}</td>
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.phone }}</td>
-                    <td>{{ user.created_at }}</td>
-                    <td class="text-center">
-                        <span role="button" class="text-info me-1" @click="editItem(user)"><font-awesome-icon icon="fa-regular fa-pen-to-square" /></span>
-                        <span role="button" class="text-danger" @click="deleteItem(index, user.id)"><font-awesome-icon icon="fa-regular fa-trash-can" /></span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <form class="row g-3 mt-0" :class="{'d-none': actionType !== 'edit_user'}">
-            <div class="col-md-6">
-                <label for="Name" class="form-label">Name</label>
-                <input type="text" class="form-control" id="name" name="name" v-model="editedItem.name" placeholder="Enter Name">
-            </div>
-            <div class="col-md-6">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" name="email" v-model="editedItem.email" placeholder="Enter Email">
-            </div>
-            <div class="col-12">
-                <label for="Phone" class="form-label">Phone</label>
-                <input type="text" class="form-control" id="phone" name="phone" v-model="editedItem.phone" placeholder="Enter Phone">
-            </div>
-            <div class="col-12 text-center">
-                <button type="reset" class="btn btn-warning text-white me-2" @click.prevent="resetForm">Reset</button>
-                <button type="submit" class="btn btn-primary" @click.prevent="updateItem">Update</button>
-            </div>
-        </form>
+        <div v-if="actionType === 'users'" class="col-12 border border-info rounded-bottom mb-3">
+            <table class="table table-hover table-responsive">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Created at</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(user, index) in users" :key="index">
+                        <td>{{ index+1 }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.phone }}</td>
+                        <td>{{ user.created_at }}</td>
+                        <td class="text-center">
+                            <span role="button" class="text-warning me-1" @click="editUser(user)"><font-awesome-icon icon="fa-regular fa-pen-to-square" /></span>
+                            <span role="button" class="text-danger" @click="deleteConfirmation(index, user.id)"><font-awesome-icon icon="fa-regular fa-trash-can" /></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div v-else class="col-12 border border-info rounded-bottom mb-3">
+            <form class="row g-3 mt-0 mb-3">
+                <div class="col-md-6">
+                    <label for="Name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" v-model="user.name" placeholder="Enter Name">
+                </div>
+                <div class="col-md-6">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" v-model="user.email" placeholder="Enter Email">
+                </div>
+                <div class="col-12">
+                    <label for="Phone" class="form-label">Phone</label>
+                    <input type="text" class="form-control" id="phone" name="phone" v-model="user.phone" placeholder="Enter Phone">
+                </div>
+                <div class="col-12 text-center">
+                    <button type="reset" class="btn btn-warning text-white me-2" @click.prevent="resetForm">Reset</button>
+                    <button type="submit" class="btn btn-primary" @click.prevent="saveUser">Update</button>
+                </div>
+            </form>
+        </div>
     </div>
 </template>
 
@@ -77,20 +81,11 @@
             },
         data: () => ({
             users: [],
-            defaultTitle: 'Users',
+            user: {},
+            cachedUser: {},
             actionType: '',
             defaultType: 'users',
-            editedItemIndex: -1,
-            editedItem: {
-                name: "",
-                email: "",
-                phone: "",
-            },
-            defaultItem: {
-                name: "",
-                email: "",
-                phone: "",
-            },
+            editedItemIndex: -1
         }),
         created() {
             console.log('Users Created');
@@ -126,21 +121,62 @@
         },
         methods: {
             resetForm() {
-                this.editedItem = Object.assign(this.editedItem, this.defaultItem);
+                this.user = Object.assign({}, this.cachedUser);
             },
-
             closeForm() {
-                this.actionType = this.defaultType;
                 this.editedItemIndex = -1;
-                this.editedItem = Object.assign({}, this.defaultItem);
+                this.actionType = this.defaultType;
+                this.user = {};
             },
-            editItem(item) {
-                this.actionType = 'edit_user';
+            editUser(item) {
                 this.editedItemIndex =  this.users.indexOf(item);
-                this.editedItem = Object.assign({}, item);
+                
+                if(this.editedItemIndex !== -1){
+                    this.actionType = 'edit_user';
+                    this.user = Object.assign({}, item);
+                    this.cachedUser = Object.assign({}, item);
+                } else{
+                    myToast('error', 'Something went wrong!');
+                }
             },
-            async deleteItem(index, id){
-                console.log('Delete users');
+            deleteConfirmation(index, id){
+                let _this = this;
+
+                this.$iziToast.show({
+                    close: false,
+                    overlay: true,
+                    timeout: 5000,
+                    displayMode: 'once',
+                    id: 'question',
+                    zindex: 999,
+                    title: 'Hey',
+                    message: 'Are you sure about that?',
+                    position: 'topCenter', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
+                    progressBarColor: 'rgb(0, 255, 184)',
+                    buttons: [
+                        ['<button><b>YES</b></button>', function (instance, toast) {
+                
+                            instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+
+                            _this.deleteUser(index, id);
+
+                        }, true],
+                        ['<button>NO</button>', function (instance, toast) {
+                
+                            instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                
+                        }],
+                    ],
+                    onClosing: function(instance, toast, closedBy){
+                        // console.info('Closing | closedBy: ' + closedBy);
+                    },
+                    onClosed: function(instance, toast, closedBy){
+                        // console.info('Closed | closedBy: ' + closedBy);
+                    }
+                });
+            },
+            async deleteUser(index, id){
+                console.log('Delete user');
 
                 let req_url = `user/${id}`;
                 let req_config = { method: 'DELETE'};
@@ -158,13 +194,13 @@
                     }
                 }
             },
-            async updateItem(){
+            async saveUser(){
                 this.$emitter.emit('loadingStatus', true);
 
-                console.log('Update users');
+                console.log('Update user');
 
-                let req_url = `user/${this.editedItem?.id}`;
-                let req_config = { method: 'PUT', data: this.editedItem};
+                let req_url = `user/${this.user?.id}`;
+                let req_config = { method: 'PUT', data: this.user};
 
                 const { result, errors, is_finished } = await this.excecuteAxios(req_url, req_config);
                 this.reqErrorMessage = errors?.message;
@@ -175,14 +211,14 @@
                     console.log('User update response :>> ', result);
 
                     if(!errors){
-                        this.users[this.editedItemIndex] = this.editedItem;
+                        this.users[this.editedItemIndex] = this.user;
                         this.closeForm();
                     }
                 }
             }
         },
         computed: {
-            actionTitle: function(){
+            actionTitle(){
                 // console.log('this.actionType :>> ', this.actionType);
 
                 let title;
@@ -192,7 +228,7 @@
                 } else if(this.actionType === 'edit_user'){
                     title = 'Edit User';
                 } else{
-                    title = this.defaultTitle;
+                    title = 'Users';
                 }
 
                 return title;
