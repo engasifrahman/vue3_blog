@@ -1,11 +1,9 @@
 <template>
-  <div v-if="loadingStatus" class="center-spinner">
-    <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
+  <div v-if="loadingStatus" id="preloader" class="overlay" role="status">
+    <div class="spinner-grow" role="status"></div>
   </div>
 
-  <div :class="{'d-none': loadingStatus}">
+  <div>
     <header>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -132,12 +130,24 @@
 </script>
 
 <style scoped>
-  .center-spinner {
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-    height: 100vh;
-  }
+   #preloader{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+   }
+   .overlay {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 2;
+      cursor: pointer;
+   }
   .router-link-active,
   .router-link-exact-active{
     color: black;
